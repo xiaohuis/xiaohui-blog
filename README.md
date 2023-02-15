@@ -36,9 +36,15 @@ ps：前端部分是使用别人的项目，再根据自身需求做出部分修
 
 
 #### 5、小辉博客需修改的配置：
+
 1、七牛云API中的密钥凭证ACCESS_KEY与SECRET_KEY，仓库BUCKET等；
+
 2、JwtAuthenticationTokenFilter类和article.js中的重定向链接需要更换；
+
 3、application-dev.yml中的配置需要修改，如MySQL和redis数据库的相关配置；
+
 4、application-prod.yml中的配置也需要修改，如ssl，MySQL和redis数据库的相关配置；
+
 5、SendMailUtil类中的相关配置需要修改，如sendEmailAccount、sendEmailPassword等；
+
 6、如果需要，ProjectExceptionAdvice统一异常处理类也可以修改一下，修改发送异常的邮箱，如果不需要，则可以注释掉。
