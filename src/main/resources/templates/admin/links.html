@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='友链管理',active='links'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">友链管理</h4>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>链接名称</th>
+                                <th>链接地址</th>
+                                <th>链接描述</th>
+                                <th>链接排序</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="link : ${links.list}">
+                                <tr th:attr="id=${link.id}">
+                                    <td th:text="${link.nickname}"></td>
+                                    <td><a th:href="@{${link.link}}" target="_blank" th:text="${link.link}"></a></td>
+                                    <td th:text="${link.describe}"></td>
+<!--                                    <td><img style="height: 50px; width: 50px;" th:src="${link.describe}" alt=""></td>-->
+                                    <td th:text="${link.sort}"></td>
+                                    <td>
+                                        <a href="javascript:void(0)" onclick="editLink(this);" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
+                                            <i class="fa fa-edit"></i> <span>编辑</span>
+                                        </a>
+                                        <a href="javascript:void(0)" th:onclick="'delLink('+${link.id}+');'" class="btn btn-danger btn-sm waves-effect waves-light m-b-5">
+                                            <i class="fa fa-trash-o"></i> <span>删除</span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                        <div th:replace="comm/macros :: pageAdminNav(${links})"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" style="padding: 20px;">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading"><h3 class="panel-title">保存友链</h3></div>
+                                <div class="panel-body">
+
+                                    <form id="linkForm" class="form-inline" role="form" novalidate="novalidate">
+
+                                        <input type="hidden" id="id" name="id"/>
+
+                                        <div class="form-group">
+                                            <label class="sr-only">链接标题</label>
+                                            <input type="text" id="nickname" name="nickname" class="form-control" placeholder="请输入链接标题"
+                                                   required="required" aria-required="true"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="sr-only">链接URL</label>
+                                            <input type="url" id="link" name="link" class="form-control" placeholder="请输入链接地址" required="required"
+                                                   aria-required="true"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="sr-only">链接描述</label>
+                                            <input type="text" id="describe" name="describe" class="form-control"
+                                                   placeholder="请输入链接描述，没有则不输入" style="width: 300px"/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="sr-only">链接排序</label>
+                                            <input type="number" id="sort" name="sort" class="form-control" value="0"/>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-success waves-effect waves-light m-l-10">保存链接</button>
+                                    </form>
+                                </div> <!-- panel-body -->
+                            </div> <!-- panel -->
+                        </div> <!-- col -->
+
+                    </div>
+                </div>
+                <div th:replace="admin/fragments/footer :: footer-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script src="//cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js"></script>
+<script src="//cdn.bootcss.com/jquery-validate/1.15.1/localization/messages_zh.min.js"></script>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var tale = new $.tale();
+
+    $('#linkForm').validate({
+        submitHandler: function (form) {
+            var id = $('#linkForm #id').val();
+            var params = $("#linkForm").serialize();
+            if(id && id != null){
+                tale.alertOkAndReload(id);
+                console.log(params)
+                console.log(id)
+                tale.ajax({
+                    type: "PUT",
+                    url : '/admin/links/update',
+                    data: params,
+                    success: function (result) {
+                        $('#linkForm input').val('');
+                        $('#linkForm #sort').val('0');
+                        if(result && result.code == 20041){
+                            tale.alertOkAndReload('友链保存成功');
+                        } else {
+                            tale.alertError(result.message || '友链保存失败');
+                        }
+                    }
+                });
+            }else {
+                console.log(params)
+                tale.ajax({
+                    type: "POST",
+                    url : '/admin/links/save',
+                    data: params,
+                    success: function (result) {
+                        $('#linkForm input').val('');
+                        $('#linkForm #sort').val('0');
+                        if(result && result.code == 20021){
+                            tale.alertOkAndReload('友链保存成功');
+                        } else {
+                            tale.alertError(result.message || '友链保存失败');
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    function editLink(obj) {
+        var this_ = $(obj);
+
+        var id = this_.parents('tr').attr('id');
+        var nickname = this_.parents('tr').find('td:eq(0)').text();
+        var link = this_.parents('tr').find('td:eq(1)').text();
+        // var logo = this_.parents('tr').find('td:eq(2)').text();
+        // var describe = this_.parents("tr").find("td:eq(2)").children().attr("src");
+        var describe = this_.parents('tr').find('td:eq(2)').text();
+        var sort = this_.parents('tr').find('td:eq(3)').text();
+
+        $('#linkForm #id').val(id);
+        $('#linkForm #nickname').val(nickname);
+        $('#linkForm #link').val(link);
+        $('#linkForm #describe').val(describe);
+        $('#linkForm #sort').val(sort);
+    }
+
+    function delLink(id) {
+        tale.alertConfirm({
+            title:'确定删除该链接吗?',
+            then: function () {
+                tale.ajax({
+                    type: "DELETE",
+                    url : '/admin/links/delete/' + id,
+                    success: function (result) {
+                        if(result && result.code == 20031){
+                            tale.alertOkAndReload('链接删除成功');
+                        } else {
+                            tale.alertError(result.message || '链接删除失败');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohuis.dao.BlogDao">
+
+    <resultMap id="blogMap" type="blog">
+        <id column="blog_id" property="id" />
+        <result column="user_id" property="userId"/>
+        <result column="title" property="title"  />
+        <result column="type" property="type"  />
+        <result column="summary" property="summary"  />
+        <result column="content" property="content"  />
+        <result column="creat_time" property="creatTime"  />
+        <result column="update_time" property="updateTime"  />
+        <result column="classification_id" property="classificationId"  />
+        <result column="views" property="views"/>
+        <result column="picture_url" property="pictureUrl"  />
+        <result column="is_recommend" property="isRecommend" />
+        <result column="is_reprint" property="isReprint"  />
+        <result column="is_appreciation" property="isAppreciation"  />
+        <result column="is_comment" property="isComment"  />
+        <result column="property" property="property"  />
+        <result column="status" property="status" />
+    </resultMap>
+
+    <resultMap id="findBlogCombinationMap1" type="com.xiaohuis.pojo.BlogCombination" extends="blogMap">
+        <association property="user" column="user_id" javaType="user" fetchType="lazy" select="com.xiaohuis.dao.UserDao.findUserById"/>
+        <association property="classification" column="classification_id" javaType="classification" fetchType="lazy" select="com.xiaohuis.dao.ClassificationDao.findClassificationById"/>
+    </resultMap>
+
+    <resultMap id="findBlogCombinationMap2" type="com.xiaohuis.pojo.BlogCombination" extends="blogMap">
+        <association property="user" column="user_id" javaType="user" fetchType="lazy" select="com.xiaohuis.dao.UserDao.findUserById"/>
+        <association property="classification" column="classification_id" javaType="classification" fetchType="lazy" select="com.xiaohuis.dao.ClassificationDao.findClassificationById"/>
+        <collection property="tagList" column="blog_id" ofType="tag" fetchType="lazy" select="com.xiaohuis.dao.TagDao.findTagByBlogId"/>
+    </resultMap>
+
+
+    <sql id="BlogAllField">
+        xb.id as blog_id,xb.user_id,xb.title,xb.type,xb.summary,xb.content,xb.creat_time,xb.update_time,xb.classification_id,xb.views,xb.picture_url,
+            xb.is_recommend,xb.is_reprint,xb.is_appreciation,xb.is_comment,xb.property,xb.status
+    </sql>
+
+    <sql id="BlogPartField">
+        id,title,views
+    </sql>
+
+    <select id="findBlogCombination" resultMap="findBlogCombinationMap1">
+        select <include refid="BlogAllField"/>
+        from xh_blog xb
+        where status = 1
+        order by xb.creat_time desc
+    </select>
+
+    <select id="findRecommendedBlogByConditions" resultType="com.xiaohuis.pojo.RecommendedBlog">
+        select <include refid="BlogPartField"/>
+        from xh_blog
+        <where>
+            status = 1
+            <if test="isRecommend != null and isRecommend == 1">
+                and is_recommend = #{isRecommend}
+            </if>
+        </where>
+        order by creat_time desc
+    </select>
+    
+    <select id="searchBlogCombinationByConditions" resultType="com.xiaohuis.pojo.FindBlogVo">
+        select distinct xb.id,xb.title,xb.type,xb.summary,xb.content,xb.creat_time,xb.update_time,xb.views,xb.picture_url,
+               xb.property,xb.status,xtp.id as classification_id,xtp.classification_name,xu.id as user_id,xu.nickname,xu.icon
+        from xh_blog xb
+        left join xh_blog_tag xbt on xb.id = xbt.blog_id
+        left join xh_tag xt on xbt.tag_id = xt.id
+        left join xh_classification xtp on xb.classification_id = xtp.id
+        left join xh_user xu on xb.user_id = xu.id
+        <where>
+            <if test="status != null and status == 1">
+                xb.status = 1
+            </if>
+            <if test="status != null and status != 1">
+                xb.status != 0
+            </if>
+            <if test="conditions != null">
+            AND
+                (xb.title like CONCAT('%', #{conditions}, '%')
+                or xb.summary like CONCAT('%', #{conditions}, '%')
+                or xb.content like CONCAT('%', #{conditions}, '%')
+                or xt.tag_name like CONCAT('%', #{conditions}, '%')
+                or xtp.classification_name like CONCAT('%', #{conditions}, '%'))
+            </if>
+        </where>
+        order by xb.creat_time desc
+    </select>
+
+
+    <select id="findBlogCombinationListByConditions" resultMap="findBlogCombinationMap2">
+        select <include refid="BlogAllField"/>
+        from xh_blog xb
+        where status = 1
+        <if test="blog.userId != null and blog.userId != ''">
+            and user_id = #{blog.userId}
+        </if>
+        <if test="blog.classificationId != null and blog.classificationId != ''">
+            and classification_id = #{blog.classificationId}
+        </if>
+        ORDER by creat_time desc
+    </select>
+
+    <select id="findBlogCombinationByConditions" resultMap="findBlogCombinationMap2">
+        select <include refid="BlogAllField"/>
+        from xh_blog xb
+        <where>
+        <if test="blog.status != null and blog.status == 1">
+            status = 1
+        </if>
+            <if test="blog.status != null and blog.status != 1">
+                status != 0
+            </if>
+        <if test="blog.id != null and blog.id != ''">
+            and id = #{blog.id}
+        </if>
+        </where>
+        ORDER by creat_time desc
+    </select>
+
+    <select id="findBlogCombinationByTagId" resultMap="findBlogCombinationMap2">
+        select <include refid="BlogAllField"/>
+        from xh_blog xb , xh_blog_tag xbt
+        where xb.id = xbt.blog_id and xbt.tag_id = #{tagId} and xb.status = 1
+    </select>
+
+    <select id="findGroupYear" resultType="java.lang.String">
+        select YEAR(creat_time)
+        from xh_blog
+        where `status` = 1
+        group by YEAR(creat_time)
+        order by YEAR(creat_time) asc
+    </select>
+
+    <select id="findBlogByYear" resultMap="blogMap">
+        select <include refid="BlogAllField"/>
+        from xh_blog xb
+        where xb.`status` = 1 and YEAR(xb.creat_time) = #{year}
+        order by xb.creat_time
+    </select>
+
+    <select id="findBlogCount" resultType="java.lang.Integer">
+        select count(id)
+        from xh_blog
+        where `status` = 1
+    </select>
+
+    <select id="findBlogViews" resultType="java.lang.Integer">
+        select views
+        from xh_blog
+        where `status` = 1 and id = #{id}
+    </select>
+
+
+    <insert id="addBlog"  useGeneratedKeys="true" keyProperty="id">
+        insert into xh_blog(id,user_id,title,type,summary,content,creat_time,classification_id,picture_url,is_recommend,is_reprint,is_appreciation,is_comment,property,status)
+        values(null,#{blogVo.userId},#{blogVo.title},#{blogVo.type},#{blogVo.summary},
+               #{blogVo.content},#{blogVo.creatTime},#{blogVo.classificationId},
+               #{blogVo.pictureUrl},#{blogVo.isRecommend},#{blogVo.isReprint},#{blogVo.isAppreciation},
+               #{blogVo.isComment},#{blogVo.property},#{blogVo.status})
+    </insert>
+
+    <update id="updateBlog">
+        update xh_blog
+        set user_id = #{blogVo.userId},title = #{blogVo.title},type = #{blogVo.type},summary = #{blogVo.summary},
+            content = #{blogVo.content},update_time = #{blogVo.updateTime},classification_id = #{blogVo.classificationId},
+            picture_url = #{blogVo.pictureUrl},is_recommend = #{blogVo.isRecommend},is_reprint = #{blogVo.isReprint},
+            is_appreciation = #{blogVo.isAppreciation},is_comment = #{blogVo.isComment},property = #{blogVo.property},
+            status = #{blogVo.status}
+        where id = #{blogVo.id} and `status` != 0
+    </update>
+
+    <update id="deleteBlog">
+        update xh_blog
+        set update_time = now(),`status` = 0
+        where id = #{blogId} and `status` != 0
+    </update>
+
+    <update id="updateBlogViews">
+        update xh_blog
+        set views = #{views}
+        where id = #{id} and `status` = 1
+    </update>
+
+</mapper>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <!--移动端的预览设置，用于适配移动端-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/static/blog/Semantic-UI-CSS-master/semantic.min.css}">
+    <link rel="stylesheet" th:href="@{/static/blog/css/myblog.css}">
+    <title>标签</title>
+
+
+</head>
+<body>
+    <!--导航-->
+    <div th:replace="blog/fragments/header::headerFragment('tag')"></div>
+
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big m-opacity-mini">
+        <div class="ui container">
+            <!--头部-->
+            <div class="ui segment top attached">
+                <div class="ui middle aligned grid two column">
+                    <div class="column">
+                        <h3 class="ui header teal">标签</h3>
+                    </div>
+                    <div class="column right aligned">
+                        共<h2 class="ui orange header m-inline-block mth" th:text="${tagList.size()}">&nbsp;14&nbsp; </h2>个
+                    </div>
+                </div>
+            </div>
+            <div class="ui bottom attached segment">
+                <a th:each="tag,iter:${tagList}"  th:href="@{'/tags?tagId='+${tag.getId()}}">
+
+                    <div class="ui labeled button m-margin-tb-tiny" th:if="${tag.getId()== tagId}">
+                        <div class="ui basic teal button" th:text="${tag.getTagName()}"></div>
+                        <div class="ui basic teal left pointing label" th:text="${tag.getBlogNumber()}"></div>
+                    </div>
+                    <div class="ui labeled button m-margin-tb-tiny" th:unless="${tag.getId()==tagId}">
+                        <div  class="ui basic  button" th:text="${tag.getTagName()}"></div>
+                        <div class="ui basic left pointing label" th:text="${tag.getBlogNumber()}"></div>
+                    </div>
+                </a>
+
+            </div>
+
+            <div class="ui teal segment ">
+                <!--列表-->
+                <div class="ui attached segment ">
+                    <div th:if="${blogs.list.size()==0}"><h2>没有更多的博客啦！不过未来说不定会有哦！QAQ</h2></div>
+                    <div class="ui padded segment vertical m-padded-b-small m-mobile-clear" th:each="blog,iter:${blogs.list}">
+                        <div class="ui grid mobile reversed stackable">
+                            <div class="ui eleven wide column">
+                                <a th:href="@{'/blogDetails/'+${blog.getId()}}" target="_blank">
+                                    <h3 class="ui header" th:text="${blog.getTitle()}" ></h3>
+                                </a>
+
+                                <p class="m-text-thin m-text-lined m-text-spaced" th:text="${blog.getSummary()}"></p>
+                                <div class="ui grid">
+                                    <div class="seven wide column">
+                                        <div class="ui list horizontal link mini ">
+                                            <div class="item">
+                                                <img th:src="${blog.getUser.getIcon}" class="ui avatar image">
+                                                <div class="content" ><a href="#" class="header " th:text="${blog.getUser.getNickname}"></a></div>
+                                            </div>
+                                            <div class="item">
+                                                <i class="calendar icon" ></i><span th:text="${#dates.format(blog.getCreatTime(),'yyyy-MM-dd')}"></span>
+                                            </div>
+                                            <div class="item">
+                                                <i class="eye icon"></i><span th:text="${blog.getViews()}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="eight wide column right aligned ">
+                                        <a th:unless="${blog.getTagList()==null}"  th:each="tag1,iter:${blog.getTagList()}" th:href="@{'/tags?tagId='+${tag1.getId()}}" target="_blank" class="ui label teal basic m-padded-tiny" th:text="${tag1.getTagName()}"></a>
+                                        <a th:if="${blog.getType=='works'}" href="#" target="_blank" class="ui label teal basic m-padded-tiny">作品</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui five wide column">
+                                <a th:href="@{'/blogDetails/'+${blog.getId()}}" target="_blank" >
+                                    <img th:src="${blog.getPictureUrl}" class="ui round image ">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <!--底部-->
+            <div class="ui bottom attached segment">
+                <div class="ui middle aligned grid two column">
+                    <div class="column">
+                        <a class="ui button basic mini teal" th:if="${blogs.hasPreviousPage}" th:href="@{'/tags?tagId='+${tagId}+'&pageNum='+${blogs.prePage}}">上一页</a>
+                    </div>
+                    <div class="column right aligned">
+                        <a class="ui button basic mini teal" th:if="${blogs.hasNextPage}" th:href="@{'/tags?tagId='+${tagId}+'&pageNum='+${blogs.nextPage}}">下一页</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <!--底部footer-->
+    <div th:replace="blog/fragments/footer :: footer-content"></div>
+
+
+    <script th:src="@{/static/blog/js/jquery-3.5.1.min.js}"></script>
+    <script th:src="@{/static/blog/Semantic-UI-CSS-master/semantic.min.js}"></script>
+<script type="text/javascript">
+// $('.menu.toggle').click(function (){
+//     $('.m-item').toggleClass('m-mobile-hide');
+// });
+
+
+    $("#b1").click(function (){
+        $(".m-item").toggleClass("m-mobile-hide");
+    });
+    $('#payButton').popup({
+    popup:$('.popup.payQR'),
+    on:'click',
+    position:'bottom center'
+    })
+
+</script>
+</body>
+</html>

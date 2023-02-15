@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohuis.dao.CommentDao">
+
+    <resultMap id="commentMap" type="comment">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="email" property="email" />
+        <result column="blog_id" property="blogId" />
+        <result column="creat_time" property="creatTime"/>
+        <result column="is_admin" property="isAdmin" />
+        <result column="content" property="content" />
+        <result column="parent_id" property="parentId"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <sql id="CommentAllField" >
+        id,name,email,blog_id,creat_time,is_admin,content,parent_id,status
+    </sql>
+
+    <sql id="CommentAndTitleField" >
+        xc.id,xc.name,xc.email,xc.blog_id,xb.title,xc.creat_time,xc.is_admin,xc.content,xc.parent_id,xc.status
+    </sql>
+
+    <select id="findParentsCommentByBlogId" resultMap="commentMap">
+        select <include refid="CommentAllField"/>
+        from xh_comment
+        where blog_id = #{blogId} and parent_id = -1 and status = 1
+    </select>
+
+    <select id="findSonsCommentByBlogId" resultMap="commentMap">
+        select <include refid="CommentAllField"/>
+        from xh_comment
+        where blog_id = #{blogId} and parent_id != -1 and status = 1
+    </select>
+
+    <select id="findCommentByConditions" resultMap="commentMap">
+        select <include refid="CommentAllField"/>
+        from xh_comment
+        where status = 1
+        order by creat_time
+    </select>
+
+    <insert id="insertComment">
+        insert into xh_comment(<include refid="CommentAllField"/>)
+        values(null,#{comment.name},#{comment.email},#{comment.blogId},#{comment.creatTime},
+               #{comment.isAdmin},#{comment.content},#{comment.parentId},#{comment.status})
+    </insert>
+
+    <select id="findCommentsAndBlogTitle" resultType="com.xiaohuis.pojo.PublishedComment">
+        select <include refid="CommentAndTitleField"/>
+        from xh_comment xc , xh_blog xb
+        where xc.blog_id = xb.id and xb.status = 1 and xc.status != 0
+        order by xc.creat_time
+    </select>
+
+    <update id="updateCommentStaticById">
+        update xh_comment
+        set `status` = #{status}
+        where id = #{id}
+    </update>
+
+    <update id="updateCommentStaticByBlogId">
+        update xh_comment
+        set `status` = 0
+        where blog_id = #{blogId} and `status` != 0
+    </update>
+</mapper>

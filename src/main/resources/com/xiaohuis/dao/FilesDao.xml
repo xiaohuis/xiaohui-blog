@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohuis.dao.FilesDao" >
+
+  <resultMap id="fileMap" type="files" >
+    <id column="id" property="id" />
+    <result column="file_name" property="fileName" />
+    <result column="file_type" property="fileType"  />
+    <result column="file_key" property="fileKey"/>
+    <result column="user_id" property="userId" />
+    <result column="creat_time" property="createTime" />
+    <result column="status" property="status" />
+  </resultMap>
+
+
+  <sql id="fileAllField">
+    id, file_name, file_type, file_key, user_id, creat_time, status
+  </sql>
+
+  <select id="findAllFile" resultMap="fileMap">
+    select <include refid="fileAllField"/>
+    from xh_file
+    where status = 1
+    order by creat_time
+  </select>
+
+  <select id="findFileCount" resultType="java.lang.Integer">
+    select count(id)
+    from xh_file
+    where status = 1
+  </select>
+
+
+    <insert id="saveFiles" useGeneratedKeys="true">
+    insert into xh_file (id, file_name, file_type, file_key, user_id, creat_time, `status`)
+    values (null, #{files.fileName}, #{files.fileType}, #{files.fileKey}, #{files.userId}, #{files.createTime}, 1)
+  </insert>
+
+  <update id="updateFileStatusById">
+    update xh_file
+    set `status` = 0
+    where id = #{id} and `status` = 1
+  </update>
+</mapper>

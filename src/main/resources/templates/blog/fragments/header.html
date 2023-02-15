@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <!--移动端的预览设置，用于适配移动端-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/static/blog/Semantic-UI-CSS-master/semantic.min.css}">
+    <link rel="stylesheet" th:href="@{/static/blog/css/myblog.css}">
+</head>
+<!--导航-->
+<nav class="ui inverted attached segment m-padded-tb-mini m-shadow-small" th:fragment="headerFragment(actives)">
+    <div class="ui container">
+        <div class="ui inverted secondary menu stackable">
+            <a  href="/"><img th:src="@{/static/blog/images/logo.png}" style="width: 50px ; height: 50px"></a>
+            <h2 class="ui teal header item"><a  href="/">Hui Blog</a></h2>
+            <a th:href="@{/}" class="m-item item m-mobile-hide" th:classappend="${actives == 'home'} ? 'active' : ''"><i class="home icon"></i>首页</a>
+            <a th:href="@{/classifications}" class="m-item item m-mobile-hide" th:classappend="${actives == 'classification'} ? 'active' : ''"><i class="idea icon"></i>分类</a>
+            <a th:href="@{/tags}" class="m-item item m-mobile-hide" th:classappend="${actives == 'tag'} ? 'active' : ''"><i class="tags icon"></i>标签</a>
+            <a th:href="@{/archives}" class="m-item item m-mobile-hide" th:classappend="${actives == 'archive'} ? 'active' : ''"><i class="clone icon"></i>归档</a>
+            <a th:href="@{/links}" class="m-item item m-mobile-hide" th:classappend="${actives == 'links'} ? 'active' : ''"><i class="clone icon"></i>友链</a>
+            <a th:href="@{/about}" class="m-item item m-mobile-hide" th:classappend="${actives == 'about'} ? 'active' : ''"><i class="info icon"></i>关于我</a>
+            <div class="m-item right item  m-mobile-hide">
+                <form action="/search" method="get">
+                    <div class="ui action input inverted transparent ">
+                        <input type="text" name="conditions" placeholder="search...">
+                        <button class="ui icon button" type="submit">
+                            <i class="search icon"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <a id="b1" href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+

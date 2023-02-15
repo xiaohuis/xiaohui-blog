@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohuis.dao.ClassificationDao">
+
+    <resultMap id="classificationMap" type="classification">
+        <id column="id" property="id" />
+        <result column="classification_name" property="classificationName" />
+        <result column="introduction" property="introduction" />
+        <result column="blog_number" property="blogNumber"  />
+        <result column="creat_time" property="creatTime"  />
+        <result column="update_time" property="updateTime"  />
+        <result column="status" property="status"  />
+    </resultMap>
+
+
+    <sql id="classificationAllField">
+        id, classification_name, introduction, blog_number, creat_time, update_time, status
+    </sql>
+
+    <select id="findAllClassification" resultMap="classificationMap">
+        select <include refid="classificationAllField"/>
+        from  xh_classification
+        where status = 1
+        ORDER by creat_time desc
+    </select>
+
+    <select id="findClassificationById" resultMap="classificationMap">
+        select <include refid="classificationAllField"/>
+            from xh_classification
+            where id = #{classificationId} and status = 1
+    </select>
+
+    <update id="updateClassificationBlogNumberByClassificationId">
+        update xh_classification set blog_number = #{classification.blogNumber} where id = #{classification.id} and status = 1
+    </update>
+
+    <update id="updateClassificationByClassificationId">
+        update xh_classification
+        set classification_name = #{classification.classificationName}, introduction = #{classification.introduction}, update_time = #{classification.updateTime}
+        where id = #{classification.id} and status = 1
+    </update>
+
+    <insert id="saveClassification" useGeneratedKeys="true">
+        insert into xh_classification(id, classification_name, introduction, blog_number, creat_time, update_time, status)
+        VALUES (null, #{classification.classificationName}, #{classification.introduction}, 0, #{classification.creatTime}, null, 1)
+    </insert>
+
+    <update id="deleteClassificationByClassificationId">
+        update xh_classification set status = 0, update_time = now() where id = #{classificationId} and status = 1
+    </update>
+
+</mapper>

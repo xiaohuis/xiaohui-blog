@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='个人设置',active='home'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<style>
+    #add-icon, #add-code, #add-email-code{
+        position: relative;
+    }
+
+    #upload-btn, #checkCodeImg, #send-code-btn{
+        position: absolute;
+        top: 2px;
+        height: 30px;
+        right: 13px;
+        border: 1px solid orange;
+        background-color: #fff;
+        /*border: none;*/
+        /*outline: none;*/
+    }
+
+</style>
+<body>
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">个人设置</h4>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-color panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">个人信息</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal" role="form" id="user-form">
+                                    <input type="hidden" name="id" th:value="${session.loginUser.id}" id="id">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">账号</label>
+                                        <div class="col-md-9">
+                                            <input type="text" th:value="${session.loginUser.username}" class="form-control"  readonly="readonly" disabled="disabled"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">昵称</label>
+                                        <div class="col-md-9">
+                                            <input id="nickname" type="text" class="form-control" name="nickname" placeholder="输入您的姓名"
+                                                   th:value="${session.loginUser.nickname}" required="required" aria-required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">邮箱</label>
+                                        <div class="col-md-9">
+                                            <input id="email" type="email" class="form-control" name="email" placeholder="输入您的邮箱"
+                                                   th:value="${session.loginUser.email}" required="required" aria-required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">手机</label>
+                                        <div class="col-md-9">
+                                            <input id="phone" type="text" class="form-control" name="phone" placeholder="输入您的手机号"
+                                                   th:value="${session.loginUser.phone}" required="required" aria-required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">头像</label>
+                                        <div class="col-md-9" id="add-icon">
+                                            <input id="icon" type="text" class="form-control" name="icon" placeholder="输入您的头像地址"
+                                                   th:value="${session.loginUser.icon}" required="required" aria-required="true"/>
+                                            <!-- 用于读取图片 -->
+                                            <input class="input-picture" type="file" accept="image/*" style="display: none;">
+                                            <!-- 用于触发事件 -->
+                                            <button type="button" class="upload-btn" id="upload-btn">选择图片上传</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">备注</label>
+                                        <div class="col-md-9">
+                                            <input id="note" type="text" class="form-control" name="note" placeholder="输入您的备注"
+                                                   th:value="${session.loginUser.note}" required="required" aria-required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix pull-right">
+                                        <button type="button" class="btn btn-primary waves-effect waves-light" onclick="saveSetting()">
+                                            保存信息
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel panel-color panel-danger">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">修改密码</h3>
+                            </div>
+                            <div class="panel-body">
+                                <form class="form-horizontal" role="form" id="pwd-form">
+                                    <input type="hidden" name="id" th:value="${session.loginUser.id}" id="ids">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">输入新密码</label>
+                                        <div class="col-md-9">
+                                            <input type="password" name="newPassword" id="password1" class="form-control" required="required"
+                                                   aria-required="true" rangelength="[6,14]"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">确认新密码</label>
+                                        <div class="col-md-9">
+                                            <input type="password" name="repassPassword" class="form-control" equalTo="#password1"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">输入 邮箱</label>
+                                        <div class="col-md-9">
+                                            <input id="email-pwd" type="email" class="form-control" name="email" placeholder="输入您的邮箱"
+                                                   th:value="${session.loginUser.email}" required="required" aria-required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">输入验证码</label>
+                                        <div class="col-md-9" id="add-code">
+                                            <input id="verification-code" type="text" class="form-control" name="verificationCode" placeholder="不区分大小写"
+                                                   required="required" aria-required="true"/>
+                                            <img id="checkCodeImg" th:src="@{/admin/CheckCodeServlet}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label">输入邮箱验证码</label>
+                                        <div class="col-md-9" id="add-email-code">
+                                            <input id="email_code" type="text" class="form-control" name="userEmailCode" placeholder="输入邮箱验证码"
+                                                   required="required" aria-required="true"/>
+                                            <!-- 用于触发事件 -->
+                                            <button type="button" class="send-code-btn" id="send-code-btn" onclick="sendCodeBtn()">发送验证码</button>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix pull-right">
+                                        <button type="submit" class="btn btn-danger waves-effect waves-light">
+                                            设置密码
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div th:replace="admin/fragments/footer :: footer-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/jquery.validate.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/jquery-validate/1.15.1/localization/messages_zh.min.js}"></script>
+<script th:inline="javascript" type="text/javascript">
+
+    // function checkCodeImgs() {
+    //     $('#checkCodeImg').src = "/admin/CheckCodeServlet?"+new Date().getMilliseconds();
+    // }
+
+
+    /*<![CDATA[*/
+
+    $('.upload-btn').click(function () {
+        $('.input-picture').click()
+    });
+
+    //验证码
+    document.getElementById("checkCodeImg").onclick = function () {
+        document.getElementById("checkCodeImg").src = "/admin/CheckCodeServlet?"+new Date().getMilliseconds();
+    }
+
+    var tale = new $.tale();
+
+    $('.input-picture').on('change', function () {
+        var file = $('.input-picture').get(0).files[0];
+        console.log(file)
+        if (!file || file.length == 0) {
+            return
+        };
+        var fileName = file.name;
+        console.log(fileName);
+        var fileType = fileName.substr(fileName.lastIndexOf(".")).toUpperCase();
+        if (fileType != ".GIF" && fileType != ".PNG" && fileType != ".JPG" && fileType != ".JPEG") {
+            tale.alertError("请选择图片文件!")  // 提示
+            //alert('请选择图片文件！')
+            return
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            tale.alertError("上传图片大小不能超过 2MB!")
+            //alert('上传图片大小不能超过 2MB！') // 提示
+            $('.input-img').get(0).value = ''
+            return
+        }
+
+        var formdata = new FormData();
+        formdata.append("editormd-image-file", file);
+        console.log(formdata);
+        console.log(formdata.get("editormd-image-file"));
+
+        $.post({
+            url: "/admin/files/uploadfile",
+            type: 'POST',
+            cache: false,
+            data: formdata,
+            dataType:"json",
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result.success == 1) {
+                    $('#icon').val(result.url);
+                } else {
+                    tale.alertError('上传失败');
+                }
+            }
+
+        })
+
+    });
+
+    /**
+     * 保存个人信息
+     */
+    function saveSetting() {
+        var param = $('#user-form').serialize();
+
+        var nickname = $("#nickname").val();
+        var email = $("#email").val();
+        var phone = $("#phone").val();
+        var icon = $("#icon").val();
+        var note = $("#note").val();
+
+
+        if (nickname == [[${session.loginUser.nickname}]]
+            && email == [[${session.loginUser.email}]]
+            && phone == [[${session.loginUser.phone}]]
+            && icon == [[${session.loginUser.icon}]]
+            && note == [[${session.loginUser.note}]]
+        ) {
+            tale.alertError("什么也没有修改");
+            return false;
+        } else {
+            tale.ajax({
+                type: "PUT",
+                url : '/admin/personal-information/update',
+                data: param,
+                success: function (result) {
+                    if(result && result.code == 20041){
+                        tale.alertOk('保存成功');
+                    } else {
+                        tale.alertError(result.message || '保存失败');
+                    }
+                }
+            });
+        }
+
+    }
+
+    function sendCodeBtn(){
+        var email = $("#email-pwd").val();
+        var id = $("#ids").val();
+        if(email == null){
+            tale.alertError("邮箱不能为空");
+            return false;
+        }
+        if (email != [[${session.loginUser.email}]]
+        ) {
+            tale.alertError("邮箱不正确");
+            return false;
+        } else {
+            tale.ajax({
+                type: "POST",
+                url : '/admin/send-email-code',
+                data: {id:id,email:email},
+                success: function (result) {
+                    if(result && result.code == 20051){
+                        tale.alertOk('发送成功');
+                    } else {
+                        tale.alertError(result.message || '发送失败');
+                    }
+                }
+            });
+        }
+    }
+
+    $('#pwd-form').validate({
+        submitHandler: function (form) {
+            var params = $("#pwd-form").serialize();
+            tale.ajax({
+                type: "PUT",
+                url : '/admin/password',
+                data: params,
+                success: function (result) {
+                    if(result && result.code == 20041){
+                        tale.alertOk('密码修改成功');
+                    } else {
+                        tale.alertError(result.message || '密码修改失败');
+                    }
+                }
+            });
+        }
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

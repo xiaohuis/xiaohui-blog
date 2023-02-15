@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohuis.dao.UserDao">
+
+    <resultMap id="userMap" type="user">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="nickname" property="nickname"/>
+        <result column="email" property="email"  />
+        <result column="phone" property="phone"  />
+        <result column="icon" property="icon"  />
+        <result column="note" property="note"  />
+    </resultMap>
+
+    <sql id="UserAllField">
+        id, username,password,nickname, email, phone, icon, note, creat_time, login_time, status
+    </sql>
+
+    <sql id="UserPartField">
+        id, username, nickname, email, phone, icon, note
+    </sql>
+
+    <select id="findUserById" resultMap="userMap">
+        select <include refid="UserAllField"/>
+        from xh_user
+        where id = #{id} and status = 1
+    </select>
+
+    <select id="findUserByUsername" resultMap="userMap">
+        select  <include refid="UserAllField"/>
+            from xh_user
+        where username = #{username} and status = 1
+    </select>
+
+    <update id="updateUserById">
+        update xh_user
+        set nickname = #{userVo.nickname}, email = #{userVo.email}, phone = #{userVo.phone}, icon = #{userVo.icon}, note = #{userVo.note}
+        where id = #{userVo.id} and status = 1
+    </update>
+
+    <update id="updateUserPasswordById">
+        update xh_user
+        set password = #{userPasswordVo.newPassword}
+        where id = #{userPasswordVo.id} and status = 1
+    </update>
+</mapper>

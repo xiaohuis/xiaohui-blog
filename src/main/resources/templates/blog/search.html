@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <!--移动端的预览设置，用于适配移动端-->
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/static/blog/Semantic-UI-CSS-master/semantic.min.css}">
+    <link rel="stylesheet" th:href="@{/static/blog/css/myblog.css}">
+    <title>搜索结果</title>
+
+
+</head>
+<body>
+    <!--导航-->
+    <div th:replace="blog/fragments/header::headerFragment('search')"></div>
+
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big m-opacity-mini">
+        <div class="ui container">
+            <!--头部-->
+            <div class="ui segment">
+                <h2 class="ui header">搜索结果</h2>
+            </div>
+            <div class="ui teal segment ">
+                <!--列表-->
+                <div class="ui attached segment ">
+                    <div th:if="${blogs.list.size()==0}"><h2>没有更多的博客啦！不过未来说不定会有哦！QAQ</h2></div>
+                    <div class="ui padded segment vertical m-padded-b-small m-mobile-clear" th:each="blog,iter:${blogs.list}">
+                        <div class="ui grid mobile reversed stackable">
+                            <div class="ui eleven wide column">
+                                <a th:href="@{'/blogDetails/'+${blog.getId()}}" target="_blank">
+                                    <h3 class="ui header" th:text="${blog.getTitle()}" ></h3>
+                                </a>
+
+                                <p class="m-text-thin m-text-lined m-text-spaced" th:text="${blog.getSummary()}"></p>
+                                <div class="ui grid">
+                                    <div class="eleven wide column">
+                                        <div class="ui list horizontal link mini ">
+                                            <div class="item">
+                                                <img th:src="${blog.getIcon}" class="ui avatar image">
+                                                <div class="content"><a href="#" class="header " th:text="${blog.getNickname}"></a></div>
+                                            </div>
+                                            <div class="item">
+                                                <i class="calendar icon" ></i><span th:text="${#dates.format(blog.getCreatTime(),'yyyy-MM-dd')}"></span>
+                                            </div>
+                                            <div class="item">
+                                                <i class="eye icon"></i><span th:text="${blog.getViews()}"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="five wide column right aligned ">
+                                        <a th:unless="${blog.getType=='works'}" th:href="@{'/classification?classificationId='+${blog.getClassificationId}}" target="_blank" class="ui label teal basic m-padded-tiny" th:text="${blog.getClassificationName}"></a>
+                                        <a th:if="${blog.getType=='works'}" href="#" target="_blank" class="ui label teal basic m-padded-tiny">作品</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui five wide column">
+                                <a th:href="@{'/blogDetails/'+${blog.getId()}}" target="_blank">
+                                    <img th:src="${blog.getPictureUrl()}" alt="" class="ui round image">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--底部-->
+                <div class="ui bottom attached segment">
+                    <div class="ui middle aligned grid two column">
+                        <div class="column">
+                            <a class="ui button basic mini teal" th:if="${blogs.hasPreviousPage}" th:href="@{'?pageNum='+${blogs.prePage}}">上一页</a>
+                        </div>
+                        <div class="column right aligned">
+                            <a class="ui button basic mini teal" th:if="${blogs.hasNextPage}" th:href="@{'?pageNum='+${blogs.nextPage}}">下一页</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <!--底部footer-->
+    <div th:replace="blog/fragments/footer :: footer-content"></div>
+
+    <script th:src="@{/static/blog/js/jquery-3.5.1.min.js}"></script>
+    <script th:src="@{/static/blog/Semantic-UI-CSS-master/semantic.min.js}"></script>
+<script type="text/javascript">
+
+    $("#b1").click(function (){
+        $(".m-item").toggleClass("m-mobile-hide");
+    });
+    $('#payButton').popup({
+    popup:$('.popup.payQR'),
+    on:'click',
+    position:'bottom center'
+    })
+
+
+
+</script>
+</body>
+</html>

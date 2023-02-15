@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohuis.dao.LinkDao" >
+
+  <resultMap id="linkMap" type="link" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="describe" property="describe" jdbcType="VARCHAR" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="sort" property="sort" jdbcType="INTEGER"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+  </resultMap>
+
+
+  <sql id="linkAllField">
+    id, nickname, `describe`, link, create_time, sort, status
+  </sql>
+
+
+  <select id="findLinkCount" resultType="java.lang.Integer">
+    select count(id)
+    from xh_link
+    where status = 1
+  </select>
+
+  <select id="findAllLink" resultMap="linkMap">
+    select <include refid="linkAllField"/>
+    from xh_link
+    where status = 1
+    order by sort
+  </select>
+
+  <insert id="saveLink" useGeneratedKeys="true">
+    insert into xh_link (id, nickname, `describe`, link, create_time, sort, `status`)
+    values (null, #{link.nickname}, #{link.describe}, #{link.link}, #{link.createTime}, #{link.sort}, 1)
+  </insert>
+
+  <update id="updateLink">
+    update xh_link
+    set nickname = #{link.nickname},
+        `describe` = #{link.describe},
+        link = #{link.link},
+        sort = #{link.sort}
+    where id = #{link.id} and `status` = 1
+  </update>
+
+  <update id="updateLinkStatusById">
+    update xh_link
+    set `status` = 0
+    where id = #{id} and `status` = 1
+  </update>
+</mapper>

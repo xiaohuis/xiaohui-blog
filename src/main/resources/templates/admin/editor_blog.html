@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='保存博客',active='publish'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<link th:href="@{/static/admin/plugins/tagsinput/jquery.tagsinput.css}" rel="stylesheet"/>
+<link th:href="@{/static/admin/plugins/select2.dist.css/select2-bootstrap.css}" rel="stylesheet"/>
+<link th:href="@{/static/admin/plugins/toggles/toggles.css}" rel="stylesheet"/>
+
+<link th:href="@{//cdn.bootcss.com/multi-select/0.9.12/css/multi-select.css}" rel="stylesheet"/>
+<link th:href="@{//cdn.bootcss.com/select2/3.4.8/select2.min.css}" rel="stylesheet"/>
+<link th:href="@{/static/admin/plugins/md/css/style.css}" rel="stylesheet"/>
+<!-- editor.md -->
+<link th:href="@{/static/admin/editormd/css/editormd.css}" rel="stylesheet"/>
+<style>
+    #tags_tagsinput {
+        background-color: #fafafa;
+        border: 1px solid #eeeeee;
+    }
+
+    #tags_addTag input {
+        width: 100%;
+    }
+
+    #tags_addTag {
+        margin-top: -5px;
+    }
+
+    #add_picture{
+        position: relative;
+    }
+
+    #add_picture button{
+        position: absolute;
+        top: 2px;
+        height: 30px;
+        right: 13px;
+        border: 1px solid orange;
+        background-color: #fff;
+        /*border: none;*/
+        /*outline: none;*/
+    }
+
+    .property-css{
+        position: absolute;
+        top: 2px;
+        right: 12px;
+        width: 60px;
+        height: 30px;
+        border: 1px solid orange;
+    }
+</style>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body">"</div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">
+                            <th:block th:if="${null != blog}">
+                                编辑文章
+                            </th:block>
+                            <th:block th:unless="${null != blog}">
+                                发布文章
+                            </th:block>
+                        </h4>
+                    </div>
+                    <div class="col-md-12">
+                        <form id="articleForm" role="form" novalidate="novalidate">
+                            <input type="hidden" name="classificationId" id="classification"/>
+                            <input type="hidden" name="oldClassificationId" id="oldClassificationId"
+                                   th:value="${blog!=null and blog.getClassification!=null}?${blog.getClassification.id}: ''"/>
+                            <input type="hidden" name="oldTags" id="oldTags"
+                                   th:value="${blog!=null and blog.getTags !=null}?${blog.getTags}: ''"/>
+                            <input type="hidden" name="type" id="type"/>
+                            <input type="hidden" name="id"
+                                   th:value="${blog!=null and blog.id!=null}?${blog.id}: ''" id="id"/>
+                            <input type="hidden" name="property"
+                                   th:value="${blog!=null and blog.property !=null}?${blog.property}: 0"
+                                   id="property"/>
+                            <input type="hidden" name="status"
+                                   th:value="${blog!=null and blog.status !=null}?${blog.status}: 1"
+                                   id="status"/>
+                            <input type="hidden" name="isRecommend"
+                                   th:value="${blog!=null and blog.isRecommend !=null}?${blog.isRecommend}: 1"
+                                   id="is_recommend"/>
+                            <input type="hidden" name="isReprint"
+                                   th:value="${blog!=null and blog.isReprint !=null}?${blog.isReprint}: 1"
+                                   id="is_reprint"/>
+                            <input type="hidden" name="isAppreciation"
+                                   th:value="${blog!=null and blog.isAppreciation !=null}?${blog.isAppreciation}: 1"
+                                   id="is_appreciation"/>
+                            <input type="hidden" name="isComment"
+                                   th:value="${blog!=null and blog.isComment !=null}?${blog.isComment}: 1"
+                                   id="is_comment"/>
+                            <input type="hidden" name="content" id="content-editor"/>
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
+                                <input type="text" class="form-control" placeholder="请输入文章标题（必须）" name="title"
+                                       required="required"
+                                       aria-required="true"
+                                       th:value="${blog!=null and blog.title!=null }?${blog.title}: ''"/>
+                               <select  class="property-css" id="property1">
+                                   <option value="1">原创</option>
+                                   <option value="2">转载</option>
+                                   <option value="3">翻译</option>
+                               </select>
+                            </div>
+                            <div class="form-group col-md-6" style="padding: 0 0 0 10px;">
+                                <select id="multiple-type" class="select2 form-control"
+                                        data-placeholder="请选择文章类型..">
+                                    <th:block th:if="${null == blog}">
+                                        <option value="post" selected="selected">默认博文</option>
+                                        <option value="works" >作品</option>
+                                    </th:block>
+                                    <th:block th:unless="${null == blog}">
+                                        <option value="post" th:selected="${null != blog and blog.type=='post'} ? true : false">默认博文</option>
+                                        <option value="works" th:selected="${null != blog and blog.type=='works'} ? true : false" >作品</option>
+                                    </th:block>
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6 " style="padding: 0 10px 0 0; ">
+                                <input type="text" class="form-control" placeholder="请输入摘要（必须）" name="summary"
+                                       required="required"
+                                       aria-required="true"
+                                       th:value="${blog!=null and blog.summary!=null }?${blog.summary}: ''"/>
+                            </div>
+
+                            <div class="form-group col-md-6" id="add_picture">
+                                <input type="text" class="form-control" placeholder="博客封面" name="pictureUrl" id="add_picture_url"
+                                       required="required"
+                                       aria-required="true"
+                                       th:value="${blog!=null and blog.pictureUrl!=null }?${blog.pictureUrl}: ''"/>
+                                <!-- 用于读取图片 -->
+                                <input class="input-picture" type="file" accept="image/*" style="display: none;">
+                                <!-- 用于触发事件 -->
+                                <button type="button" class="upload-btn">选择图片上传</button>
+                            </div>
+
+                            <div class="form-group col-md-6" style="padding: 0 10px 0 0;">
+                                <!-- 如果是作品类，那么暂时不允许使用标签 -->
+                                <input name="tags" id="tags"  type="text" class="form-control" placeholder="请填写文章标签"
+                                       th:value="${blog!=null and blog.getTags !=null}?${blog.getTags}: ''"/>
+                            </div>
+                            <div class="form-group col-md-6" >
+                                <select id="multiple-sel"   class="select2 form-control"
+                                        data-placeholder="请选择分类...">
+                                    <th:block th:if="${null == classifications}">
+                                        <option value="默认分类" selected="selected">默认分类</option>
+                                    </th:block>
+                                    <th:block th:unless="${null == classifications}">
+                                        <th:block th:each="c : ${classifications}">
+                                            <option th:value="${c.id}" th:text="${c.classificationName}"
+                                                    th:selected="${null != blog and null != blog.getClassification and c.id==blog.getClassification.id} ? true : false"></option>
+                                        </th:block>
+                                    </th:block>
+                                </select>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div id="my-editormd" >
+                                <textarea id="my-text" name="my-text" style="display:none;" class="markdown-textarea"
+                                          th:utext="${blog!=null and blog.content !=null}?${blog.content}: ''"></textarea>
+                                <!-- 注意：name属性的值-->
+                                <textarea id="text" name="text" style="display:none;" ></textarea>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4" >
+                                <label class="col-sm-4">开启推荐</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${blog!=null and blog.isRecommend!=null }?'toggle toggle-success allow-'+${blog.isRecommend == 1 ? true : false}:'toggle toggle-success allow-true'"
+                                         id="recommend"> </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">开启转载声明</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${blog!=null and blog.isReprint !=null}?'toggle toggle-success allow-'+${blog.isReprint == 1 ? true : false}:'toggle toggle-success allow-true'"
+                                         id="reprint"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4">
+                                <label class="col-sm-4">开启赞赏</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${blog!=null and  blog.isAppreciation !=null}?'toggle toggle-success allow-'+${blog.isAppreciation == 1 ? true : false}: 'toggle toggle-success allow-true'"
+                                         id="appreciation"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-3 col-sm-4" id="comment-div">
+                                <label class="col-sm-4">开启评论</label>
+                                <div class="col-sm-8">
+                                    <div th:class="${blog!=null and  blog.isComment !=null}?'toggle toggle-success allow-'+${blog.isComment == 1 ? true : false}: 'toggle toggle-success allow-true'"
+                                         id="comment"></div>
+                                </div>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="text-right">
+                                <a class="btn btn-default waves-effect waves-light" th:href="@{/admin/blog}">返回列表</a>
+                                <button type="button" class="btn btn-primary waves-effect waves-light"
+                                        onclick="subArticle('1');">
+                                    保存文章
+                                </button>
+                                <button type="button" class="btn btn-warning waves-effect waves-light"
+                                        onclick="subArticle('2');">
+                                    存为草稿
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div th:replace="admin/fragments/footer :: footer-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script type="text/javascript">
+    $(function() {
+        editormd("my-editormd", {//注意1：这里的就是上面的DIV的id属性值
+            width   : "90%",
+            height  : 640,
+            syncScrolling : "single",
+            path    : "/static/admin/editormd/lib/",//注意2：你的路径
+            saveHTMLToTextarea : true,//注意3：这个配置，方便post提交表单
+            /**上传图片相关配置如下*/
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"], //图片上传格式
+            imageUploadURL: "/admin/files/uploadfile",
+            onload: function (obj) { //上传成功之后的回调
+            }
+        });
+    });
+
+    $('.upload-btn').click(function () {
+        $('.input-picture').click()
+    });
+
+</script>
+<script type="text/javascript" th:inline="javascript">
+
+    /*<![CDATA[*/
+    var tale = new $.tale();
+
+    $('.input-picture').on('change', function () {
+        var file = $('.input-picture').get(0).files[0];
+        console.log(file)
+        if (!file || file.length == 0) {
+            return
+        };
+        var fileName = file.name;
+        console.log(fileName);
+        var fileType = fileName.substr(fileName.lastIndexOf(".")).toUpperCase();
+        if (fileType != ".GIF" && fileType != ".PNG" && fileType != ".JPG" && fileType != ".JPEG") {
+            tale.alertError("请选择图片文件!")  // 提示
+            //alert('请选择图片文件！')
+            return
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+            tale.alertError("上传图片大小不能超过 2MB!")
+            //alert('上传图片大小不能超过 2MB！') // 提示
+            $('.input-img').get(0).value = ''
+            return
+        }
+
+        var formdata = new FormData();
+        formdata.append("editormd-image-file", file);
+        console.log(formdata);
+        console.log(formdata.get("editormd-image-file"));
+
+        $.post({
+            url: "/admin/files/uploadfile",
+            type: 'POST',
+            cache: false,
+            data: formdata,
+            dataType:"json",
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if (result.success == 1) {
+                    $('#add_picture_url').val(result.url);
+                } else {
+                    tale.alertError('上传失败');
+                }
+            }
+
+        })
+
+    });
+
+    /*]]>*/
+</script>
+<script th:src="@{/static/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>
+<script th:src="@{/static/admin/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>
+
+<!-- editor.md -->
+<script th:src="@{/static/admin/editormd/src/editormd.js}"></script>
+
+
+<script th:src="@{//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
+<script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
+<script th:src="@{/static/admin/js/article.js}"></script>
+</body>
+</html>

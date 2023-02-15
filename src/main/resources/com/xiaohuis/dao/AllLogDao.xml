@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaohuis.dao.AllLogDao">
+
+    <insert id="saveAllLog" useGeneratedKeys="true">
+        insert into xh_all_log(id, ip, url, http_method, class_method, time_cost, os, browser, user_agent, create_time)
+        values (null, #{allLog.ip},  #{allLog.url},  #{allLog.httpMethod},  #{allLog.classMethod},  #{allLog.timeCost},  #{allLog.os},  #{allLog.browser}, #{allLog.userAgent}, #{allLog.createTime})
+    </insert>
+
+</mapper>

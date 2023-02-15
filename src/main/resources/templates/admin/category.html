@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:with="title='分类管理',active='category'">
+<header th:replace="admin/fragments/header::headerFragment(${title},${active})"></header>
+<body class="fixed-left">
+<div id="wrapper">
+    <div th:replace="admin/fragments/header::header-body"></div>
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">分类/标签管理</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-color panel-primary">
+                            <div class="panel-heading">
+                                <h1 class="panel-title">分类列表</h1>
+                            </div>
+                            <div class="panel-body">
+                                <th:block th:each="c : ${classifications}">
+                                    <div class="btn-group m-b-10">
+                                        <th:block th:if="${c.classificationName == '默认分类'}">
+                                            <button type="button"
+                                                    th:class="'btn btn-'+${frontEndCommonsUtil.rand_color()}+' waves-effect waves-light'">
+                                                <th:block th:text="${c.classificationName}"/>
+                                                <th:block th:text="' ('+${c.blogNumber}+')'"/>
+                                            </button>
+                                        </th:block>
+                                        <th:block th:unless="${c.classificationName == '默认分类'}">
+                                            <button type="button"
+                                                    th:class="'btn btn-'+${frontEndCommonsUtil.rand_color()}+' dropdown-toggle waves-effect waves-light'"
+                                                    data-toggle="dropdown" aria-expanded="false">
+                                                <th:block th:text="${c.classificationName}"/>
+                                                <th:block th:text="' ('+${c.blogNumber}+')'"/>
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu">
+                                                <li>
+                                                    <a href="javascript:void(0)" th:attr="classificationId=${c.id},classificationName=${c.classificationName},introduction=${c.introduction}" class="edit-category">修改</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0)" th:attr="classificationId=${c.id}" class="del-category" id="del-classification">删除</a>
+                                                </li>
+                                            </ul>
+                                        </th:block>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="panel  panel-pink">
+                            <div class="panel-heading">
+                                <h1 class="panel-title">标签列表</h1>
+                            </div>
+                            <div class="panel-body">
+                                <th:block th:each="t : ${tags}">
+                                    <div class="btn-group m-b-10">
+                                        <button type="button"
+                                                th:class="'btn btn-'+${frontEndCommonsUtil.rand_color()}+' dropdown-toggle waves-effect waves-light'"
+                                                data-toggle="dropdown" aria-expanded="false">
+                                            <th:block th:text="${t.tagName}"/>
+                                            <th:block th:text="' ('+${t.blogNumber}+')'"/>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="javascript:void(0)" th:attr="tagId=${t.id}" class="del-category" id="del-tag">删除</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form id="classification-form" class="form-inline" role="form">
+                                    <input type="hidden" id="classification-id"/>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="classification-name" placeholder="请输入分类名称"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="introduction" placeholder="请输入分类简介"/>
+                                    </div>
+                                    <button id="save-category-btn" type="button"
+                                            class="btn btn-success waves-effect waves-light m-l-10">保存分类
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="admin/fragments/footer :: footer-content"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="admin/fragments/footer :: footer"></div>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    var tale = new $.tale();
+
+    $('#save-category-btn').click(function () {
+        var classificationName = $('#classification-form #classification-name').val();
+        var classificationId = $('#classification-form #classification-id').val();
+        var introduction = $('#classification-form #introduction').val();
+        if (classificationName && classificationName != '') {
+            if(classificationId && classificationId != ''){
+                tale.ajax({
+                    type: "PUT",
+                    url: '/admin/tags-and-classification/modify',
+                    data: {id: classificationId, classificationName: classificationName, introduction: introduction},
+                    success: function (result) {
+                        $('#classification-form #classification-id').val('');
+                        $('#classification-form #classification-name').val('');
+                        $('#classification-form #introduction').val('');
+                        if (result && result.code == 20041) {
+                            tale.alertOkAndReload('分类保存成功');
+                        } else {
+                            tale.alertError(result.message || '分类保存失败');
+                        }
+                    }
+                });
+            }else {
+                tale.ajax({
+                    type: "POST",
+                    url: '/admin/tags-and-classification/save',
+                    data: {classificationName: classificationName, introduction: introduction},
+                    success: function (result) {
+                        $('#classification-form #classification-id').val('');
+                        $('#classification-form #classification-name').val('');
+                        $('#classification-form #introduction').val('');
+                        if (result && result.code == 20021) {
+                            tale.alertOkAndReload('分类保存成功');
+                        } else {
+                            tale.alertError(result.message || '分类保存失败');
+                        }
+                    }
+                });
+            }
+        } else {
+            tale.alertError("分类名称不能为空");
+            return false;
+        }
+    });
+
+    $('.edit-category').click(function () {
+        var classificationId = $(this).attr('classificationId');
+        var classificationName = $(this).attr('classificationName');
+        var introduction = $(this).attr('introduction');
+        $('#classification-form #classification-id').val(classificationId);
+        $('#classification-form #classification-name').val(classificationName);
+        $('#classification-form #introduction').val(introduction);
+    });
+
+    $('.del-category').click(function () {
+        var classificationId = $(this).attr('classificationId');
+        var tagId = $(this).attr('tagId');
+        var url1 = null;
+        if(classificationId != null){
+            url1 = "/admin/tags-and-classification/classification-delete/" + classificationId;
+
+        }else if(tagId != null){
+            url1 = "/admin/tags-and-classification/tag-delete/" + tagId;
+            id = tagId
+        }
+        tale.alertConfirm({
+            title: '确定删除该项吗?',
+            then: function () {
+                tale.ajax({
+                    type: "DELETE",
+                    url: url1,
+                    success: function (result) {
+                        if (result && result.code == 20031) {
+                            tale.alertOkAndReload('删除成功');
+                        } else {
+                            tale.alertError(result.message || '删除失败');
+                        }
+                    }
+                });
+            }
+        });
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

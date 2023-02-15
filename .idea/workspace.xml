@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c9b50773-90b7-4016-9012-8586a784c35d" name="变更" comment="小辉个人博客信息齐，第一次提交">
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xiaohuis/XiaohuisBlogApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xiaohuis/XiaohuisBlogApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xiaohuis/api/QiNiuCloudService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xiaohuis/api/QiNiuCloudService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xiaohuis/controller/Exception/ProjectExceptionAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xiaohuis/controller/Exception/ProjectExceptionAdvice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xiaohuis/filter/JwtAuthenticationTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xiaohuis/filter/JwtAuthenticationTokenFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xiaohuis/util/SendMailUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xiaohuis/util/SendMailUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/static/admin/js/article.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/static/admin/js/article.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/xiaohuis.top.pfx" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="D:/ZhuanYeLei/apache-maven-3.6.1" />
+        <option name="useMavenConfig" value="true" />
+        <option name="userSettingsFile" value="D:\ZhuanYeLei\apache-maven-3.6.1\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="MavenRunner">
+    <option name="skipTests" value="true" />
+  </component>
+  <component name="ProjectId" id="2IaQFuH5W96W6DFWJWmX7GVTxBV" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;F:/blog_idea/xiaohuis_blog/src/main/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;模块&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.35172415&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.import&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;a04d28d7956ec1ab7a87d2cfbb4d5775&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+    ]
+  }
+}</component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="F:\blog_idea\xiaohuis_blog\src\main\resources" />
+      <recent name="F:\blog_idea\xiaohuis_blog\src\main\resources\static\admin\images" />
+      <recent name="F:\blog_idea\xiaohuis_blog\src\main\resources\static\blog\images" />
+      <recent name="F:\blog_idea\xiaohuis_blog\src\main\resources\templates\admin" />
+      <recent name="F:\blog_idea\xiaohuis_blog\src\main\java\com\xiaohuis\handler" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.xiaohuis.util" />
+      <recent name="com.xiaohuis.intercepter" />
+      <recent name="com.xiaohuis.config" />
+      <recent name="com.xiaohuis.controller.interceptor" />
+      <recent name="com.xiaohuis" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.XiaohuisBlogApplication">
+    <configuration name="RedisTests.TestBCryptPasswordEncoder" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="xiaohuis_blog" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xiaohuis.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.xiaohuis" />
+      <option name="MAIN_CLASS_NAME" value="com.xiaohuis.RedisTests" />
+      <option name="METHOD_NAME" value="TestBCryptPasswordEncoder" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RedisTests.contextLoads" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="xiaohuis_blog" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xiaohuis.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.xiaohuis" />
+      <option name="MAIN_CLASS_NAME" value="com.xiaohuis.RedisTests" />
+      <option name="METHOD_NAME" value="contextLoads" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XiaohuisBlogApplicationTests.contextLoads" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="xiaohuis_blog" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.xiaohuis.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.xiaohui" />
+      <option name="MAIN_CLASS_NAME" value="com.xiaohuis.XiaohuisBlogApplicationTests" />
+      <option name="METHOD_NAME" value="contextLoads" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="XiaohuisBlogApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="ACTIVE_PROFILES" />
+      <module name="xiaohuis_blog" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.xiaohuis.XiaohuisBlogApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.XiaohuisBlogApplicationTests.contextLoads" />
+        <item itemvalue="JUnit.RedisTests.TestBCryptPasswordEncoder" />
+        <item itemvalue="JUnit.RedisTests.contextLoads" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="c9b50773-90b7-4016-9012-8586a784c35d" name="变更" comment="" />
+      <created>1670417114066</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1670417114066</updated>
+      <workItem from="1670417121901" duration="8245000" />
+      <workItem from="1670483312882" duration="761000" />
+      <workItem from="1670484084910" duration="347000" />
+      <workItem from="1670484485705" duration="16772000" />
+      <workItem from="1670511234887" duration="7088000" />
+      <workItem from="1670566797015" duration="16007000" />
+      <workItem from="1670660694022" duration="23382000" />
+      <workItem from="1670919960338" duration="188000" />
+      <workItem from="1670944385094" duration="843000" />
+      <workItem from="1671006750054" duration="47000" />
+      <workItem from="1671438187985" duration="17461000" />
+      <workItem from="1671525702597" duration="20095000" />
+      <workItem from="1671608518294" duration="15587000" />
+      <workItem from="1671694068722" duration="6086000" />
+      <workItem from="1671941949485" duration="677000" />
+      <workItem from="1671943052234" duration="2688000" />
+      <workItem from="1672476565897" duration="11694000" />
+      <workItem from="1672657912420" duration="827000" />
+      <workItem from="1672746858588" duration="2329000" />
+      <workItem from="1672905544081" duration="18749000" />
+      <workItem from="1674711098853" duration="2548000" />
+      <workItem from="1675400686802" duration="1512000" />
+      <workItem from="1675783330699" duration="649000" />
+      <workItem from="1675845394814" duration="13433000" />
+      <workItem from="1675877261770" duration="959000" />
+      <workItem from="1675898678765" duration="3060000" />
+      <workItem from="1675903152190" duration="5171000" />
+      <workItem from="1675918825559" duration="6721000" />
+      <workItem from="1676036752125" duration="45000" />
+      <workItem from="1676081326762" duration="686000" />
+      <workItem from="1676110207764" duration="4540000" />
+      <workItem from="1676245195642" duration="7068000" />
+      <workItem from="1676256353406" duration="1840000" />
+      <workItem from="1676266696176" duration="2387000" />
+      <workItem from="1676301103590" duration="987000" />
+      <workItem from="1676339473474" duration="2147000" />
+      <workItem from="1676427333025" duration="7873000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="小辉个人博客信息齐，第一次提交" />
+    <option name="LAST_COMMIT_MESSAGE" value="小辉个人博客信息齐，第一次提交" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
